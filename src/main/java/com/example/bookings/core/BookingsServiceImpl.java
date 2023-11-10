@@ -23,7 +23,7 @@ public class BookingsServiceImpl implements BookingsService {
     public BookingDto createBooking(BookingCreateDto bookingCreateDto) throws OverlappingBookingsException {
         LocalDate checkInDate = bookingCreateDto.getCheckInDate();
         LocalDate checkOutDate = bookingCreateDto.getCheckOutDate();
-        ArrayList<UUID> overlappingBookings = bookingsRepository.getOverlappingBookings(checkInDate, checkOutDate);
+        List<UUID> overlappingBookings = bookingsRepository.getOverlappingBookings(checkInDate, checkOutDate);
         if(overlappingBookings.size() > 0){
             throw new OverlappingBookingsException("The apartment is already booked for given dates");
         }

@@ -15,6 +15,6 @@ public interface BookingsRepository extends CrudRepository<BookingEntity, UUID> 
 
     @Query(nativeQuery = true, value = "SELECT id from BOOKINGS " +
             "where BOOKINGS.checkInDate <= :checkOutDate and :checkInDate <= BOOKINGS.checkOutDate")
-    public ArrayList<UUID> getOverlappingBookings(@Param("checkInDate") LocalDate checkInDate,
+    public List<UUID> getOverlappingBookings(@Param("checkInDate") LocalDate checkInDate,
                                                   @Param("checkOutDate") LocalDate checkOutDate);
 }
