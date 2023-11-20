@@ -1,15 +1,11 @@
 package com.example.bookings.api;
 
-import com.example.bookings.core.BookingCreateDto;
-import com.example.bookings.core.BookingDto;
-import com.example.bookings.core.BookingsService;
-import com.example.bookings.core.OverlappingBookingsException;
+import com.example.bookings.core.*;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -62,9 +58,18 @@ public class BookingsController {
         return bookingResponse;
     }
 
-    @PatchMapping("/bookings/{id}")
-    public BookingResponse updateBooking(@PathVariable UUID id) {
-        BookingResponse bookingResponse = new BookingResponse();
+    @PutMapping("/bookings/{id}")
+    public BookingResponse updateBooking(@PathVariable UUID id, @RequestBody @Valid BookingUpdateRequest request) throws OverlappingBookingsException, BookingNotFoundException {
+        BookingDto bookingUpdateDto = new BookingDto(id,
+                request.getGuestsCount(),
+                request.getCheckInDate(),
+                request.getCheckOutDate(),
+                request.getEmail(),
+                request.getState());
+
+        BookingDto serviceResponse = bookingsService.updateBooking(bookingUpdateDto);
+
+        BookingResponse bookingResponse = convert(serviceResponse);
 
         return bookingResponse;
     }
