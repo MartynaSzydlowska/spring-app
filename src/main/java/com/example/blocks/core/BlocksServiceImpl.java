@@ -18,7 +18,7 @@ public class BlocksServiceImpl implements BlocksService {
         BlockEntity blockEntity = new BlockEntity();
         blockEntity.setId(UUID.randomUUID());
         blockEntity.setStartDate(blockCreateDo.getStartDate());
-        blockEntity.setStartDate(blockCreateDo.getStartDate());
+        blockEntity.setEndDate(blockCreateDo.getEndDate());
         blockEntity.setNote(blockCreateDo.getNote());
         blockEntity.setState(BlockState.ACTIVE);
 
