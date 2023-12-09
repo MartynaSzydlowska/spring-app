@@ -1,5 +1,6 @@
 package com.example.blocks.persistance;
 
+import com.example.blocks.core.BlockState;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -20,4 +21,6 @@ public class BlockEntity {
     private LocalDate endDate;
     @Column
     private String note;
+    @Column
+    private BlockState state;
 }
