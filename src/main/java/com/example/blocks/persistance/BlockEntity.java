@@ -9,14 +9,14 @@ import java.util.UUID;
 
 @Data
 @Entity
-@Table(name = "BLOCKADES")
+@Table(name = "BLOCKS")
 public class BlockEntity {
     @Id
     private UUID id;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "STARTDATE")
     @Temporal(TemporalType.DATE)
     private LocalDate startDate;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "ENDDATE")
     @Temporal(TemporalType.DATE)
     private LocalDate endDate;
     @Column

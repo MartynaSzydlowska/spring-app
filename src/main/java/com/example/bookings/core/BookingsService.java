@@ -4,9 +4,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface BookingsService {
-    BookingDto createBooking(BookingCreateDto bookingCreateDto) throws OverlappingBookingsException;
+    BookingDto createBooking(BookingCreateDto bookingCreateDto) throws NotAvailableSlotException;
 
-    BookingDto updateBooking(BookingDto bookingUpdateDto) throws OverlappingBookingsException, BookingNotFoundException;
+    BookingDto updateBooking(BookingDto bookingUpdateDto) throws NotAvailableSlotException, BookingNotFoundException;
 
     Optional<BookingDto> getBooking(UUID id);
 }

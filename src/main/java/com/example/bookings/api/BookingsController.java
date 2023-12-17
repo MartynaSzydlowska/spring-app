@@ -18,7 +18,7 @@ public class BookingsController {
 
     @PostMapping("/bookings")
     @ResponseStatus(HttpStatus.CREATED)
-    public BookingResponse createBooking(@RequestBody @Valid BookingRequest request) throws OverlappingBookingsException {
+    public BookingResponse createBooking(@RequestBody @Valid BookingRequest request) throws NotAvailableSlotException {
 
         BookingCreateDto bookingCreateDto = new BookingCreateDto(
                 request.getGuestsCount(),
@@ -59,7 +59,7 @@ public class BookingsController {
     }
 
     @PutMapping("/bookings/{id}")
-    public BookingResponse updateBooking(@PathVariable UUID id, @RequestBody @Valid BookingUpdateRequest request) throws OverlappingBookingsException, BookingNotFoundException {
+    public BookingResponse updateBooking(@PathVariable UUID id, @RequestBody @Valid BookingUpdateRequest request) throws NotAvailableSlotException, BookingNotFoundException {
         BookingDto bookingUpdateDto = new BookingDto(id,
                 request.getGuestsCount(),
                 request.getCheckInDate(),

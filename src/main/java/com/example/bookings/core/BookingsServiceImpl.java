@@ -1,5 +1,6 @@
 package com.example.bookings.core;
 
+import com.example.blocks.core.BlocksServiceImpl;
 import com.example.bookings.api.BookingState;
 import com.example.bookings.persistance.BookingEntity;
 import com.example.bookings.persistance.BookingsRepository;
@@ -12,18 +13,21 @@ import java.util.UUID;
 @Service
 public class BookingsServiceImpl implements BookingsService {
     private final BookingsRepository bookingsRepository;
+    private final BlocksServiceImpl blocksService;
 
-    public BookingsServiceImpl(BookingsRepository bookingsRepository) {
+    public BookingsServiceImpl(BookingsRepository bookingsRepository, BlocksServiceImpl blocksService) {
         this.bookingsRepository = bookingsRepository;
+        this.blocksService = blocksService;
     }
 
     @Override
-    public BookingDto createBooking(BookingCreateDto bookingCreateDto) throws OverlappingBookingsException {
+    public BookingDto createBooking(BookingCreateDto bookingCreateDto) throws NotAvailableSlotException {
         LocalDate checkInDate = bookingCreateDto.getCheckInDate();
         LocalDate checkOutDate = bookingCreateDto.getCheckOutDate();
         boolean overlappingBookings = bookingsRepository.hasOverlappingBookings(checkInDate, checkOutDate);
-        if (overlappingBookings) {
-            throw new OverlappingBookingsException("The apartment is already booked for given dates");
+        boolean blocksInTimeRange = blocksService.hasBlocksInTimeRange(checkInDate, checkOutDate);
+        if (overlappingBookings || blocksInTimeRange) {
+            throw new NotAvailableSlotException("The apartment is already booked for given dates");
         }
 
         BookingEntity bookingEntity = new BookingEntity();
@@ -41,7 +45,7 @@ public class BookingsServiceImpl implements BookingsService {
     }
 
     @Override
-    public BookingDto updateBooking(BookingDto bookingUpdateDto) throws OverlappingBookingsException, BookingNotFoundException {
+    public BookingDto updateBooking(BookingDto bookingUpdateDto) throws NotAvailableSlotException, BookingNotFoundException {
         BookingEntity bookingEntity = bookingsRepository.findById(bookingUpdateDto.getId())
                 .orElseThrow(() -> new BookingNotFoundException("Booking not found"));
 
@@ -50,7 +54,7 @@ public class BookingsServiceImpl implements BookingsService {
             LocalDate checkOutDate = bookingUpdateDto.getCheckOutDate();
             boolean overlappingBookings = bookingsRepository.hasOverlappingBookings(checkInDate, checkOutDate, bookingEntity.getId());
             if (overlappingBookings) {
-                throw new OverlappingBookingsException("The apartment is already booked for given dates");
+                throw new NotAvailableSlotException("The apartment is already booked for given dates");
             }
         }
 

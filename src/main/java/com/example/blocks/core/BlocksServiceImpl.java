@@ -4,13 +4,18 @@ import com.example.blocks.persistance.BlockEntity;
 import com.example.blocks.persistance.BlocksRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class BlocksServiceImpl implements BlocksService {
 
-    BlocksRepository blocksRepository;
+    private final BlocksRepository blocksRepository;
+
+    public BlocksServiceImpl(BlocksRepository blocksRepository) {
+        this.blocksRepository = blocksRepository;
+    }
 
     @Override
     public BlockDto createBlock(BlockCreateDto blockCreateDo) {
@@ -45,5 +50,10 @@ public class BlocksServiceImpl implements BlocksService {
     @Override
     public Optional<BlockDto> getBooking(UUID id) {
         return Optional.empty();
+    }
+
+    @Override
+    public boolean hasBlocksInTimeRange(LocalDate startDate, LocalDate endDate) {
+        return blocksRepository.hasBlocksInTimeRange(startDate, endDate);
     }
 }
