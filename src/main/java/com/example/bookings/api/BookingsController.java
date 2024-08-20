@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 public class BookingsController {
@@ -35,9 +36,12 @@ public class BookingsController {
 
     @GetMapping("/bookings")
     public List<BookingResponse> getBookings() {
-        BookingResponse bookingResponse = new BookingResponse();
+        List<BookingDto> serviceResponse = bookingsService.getBookings();
+        List<BookingResponse> bookingResponse = serviceResponse.stream()
+                .map(response -> convert(response))
+                .collect(Collectors.toList());
 
-        return List.of(bookingResponse);
+        return bookingResponse;
     }
 
     @GetMapping("/bookings/{id}")

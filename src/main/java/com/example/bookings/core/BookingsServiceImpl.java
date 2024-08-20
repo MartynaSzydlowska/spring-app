@@ -7,6 +7,8 @@ import com.example.bookings.persistance.BookingsRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -68,6 +70,15 @@ public class BookingsServiceImpl implements BookingsService {
 
         BookingDto bookingDto = convert(savedBookingEntity);
         return bookingDto;
+    }
+
+    public List<BookingDto> getBookings() {
+        Iterable<BookingEntity> bookings = bookingsRepository.findAll();
+        ArrayList<BookingDto> result = new ArrayList<>();
+        bookings.forEach(entity -> convert(entity));
+        bookings.forEach(booking -> result.add(convert(booking)));
+
+        return result;
     }
 
     private BookingDto convert(BookingEntity savedBookingEntity) {
